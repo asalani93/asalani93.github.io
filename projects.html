@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<!--
+  File:  /~asalani/projects.html
+  91.461 Assignment:  Creating Your First Web Page
+  Anthony Salani, UMass Lowell Computer Science, asalani93@gmail.com
+  Copyright (c) 2015 by Anthony Salani.  All rights reserved.  May be freely 
+    copied or excerpted for any purpose with credit to the author.
+  Created by AAS on September 6, 2015
+
+  This page details projects that I've worked on.
+-->
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Anthony Salani</title>
+    <link rel="stylesheet" type="text/css" href="/~asalani/css/styles.css" />
+  </head>
+  <body>
+
+<!--
+  Page header and navigation bar.
+  Navigation bar is positioned inside of the header for semantic reasons, but
+    will normally stay anchored to the top of the window, and move as the user
+    scrolls.
+  The header background is a large image because I like large images, despite
+    the potential negative impacts on user experience.  That's why I used a
+    small large image.
+-->
+
+    <div class="header">
+      <div class="header-nav">
+        <div class="header-nav-center">
+          <ul>
+            <li>
+              <a href="/~asalani">Home</a>
+            </li>
+            <li>
+              <a href="/~asalani/assignments.html">91.461</a>
+              <ul class="header-inner-menu">
+                <li>
+                  <a href="/~asalani/assignments.html">Assignment #2</a>
+                </li>
+                <li>
+                  <a href="/~asalani/assignment-3.html">Assignment #3</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/~asalani/projects.html">Projects</a>
+            </li>
+            <li>
+              <a href="https://github.com/asalani93" target="_blank">GitHub</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+<!--
+  Page content.
+  This will probably stay relatively blank because while it may look like one,
+    this page is not actually a blog.
+-->
+
+    <div class="content">
+        <h1>Projects</h1>
+        <p>
+          Everything listed below is a project that was for a class, work, or done
+          on personal time.  All are in varying states of completion.  Not
+          everything works perfectly.
+        </p>
+      
+        <!--
+          A list of projects/assignments.
+        -->
+        <div class="projects-container">
+          <!--
+            Formula Fields description box
+          -->
+      <div class="project">
+        <a href="https://github.com/asalani93/formula_fields" class="project-title">
+          Formula Fields
+        </a>
+        
+        <p>
+                A domain specific programming language designed for integration into
+                <a href="http://isenseproject.org">iSENSE</a>.  It's mostly done, and
+                only needs a couple more modules added to the standard library and
+                some tests to be considered complete.  Formula Fields was written
+                entirely in Ruby, and makes extensive use of
+                <a href="https://github.com/chriswailes/RLTK">RLTK (Ruby Language
+                Toolkit)</a>.
+        </p>
+      </div>
+      
+          <!--
+            Movie Recommendations
+          -->
+      <div class="project">
+        <a href="https://github.com/SmashMouthFanClub/ml-project-2015" class="project-title">
+          Movie Recommendations
+        </a>
+        
+        <p>
+                An application for recommending movies to users.  It was written for
+                91.422 (Machine Learning), and was done in conjunction with
+                <a href="http://www.cs.uml.edu/~mmoscat/">Misael Moscat</a> and
+                <a href="http://www.cs.uml.edu/~mstowell/">Michael Stowell</a>.  My
+                contribution to this project was Python code for extracting,
+                preprocessing and matching movie titles, ratings and tags across
+                several different data sources.  Collaborative filtering was then
+                run on this data to produce recommendations.
+        </p>
+      </div>
+      
+          <!--
+            Better Color Picker
+          -->
+      <div class="project">
+        <a href="https://github.com/asalani93/better-colorpicker" class="project-title">
+          Better Colorpicker
+        </a>
+        
+        <p>
+                A color picker UI widget designed for integration into
+                <a href="http://isenseproject.org">iSENSE</a>.  It is available as a
+                Ruby gem.  It is written in Coffeescript and CSS.
+        </p>
+      </div>
+      
+          <!--
+            Better Date Time Picker
+          -->
+      <div class="project">
+        <a href="https://github.com/asalani93/better-datetimepicker" class="project-title">
+          Better Date/Time Picker
+        </a>
+        
+        <p>
+                A color picker UI widget designed for integration into
+                <a href="http://isenseproject.org">iSENSE</a>.  It is available as a
+                Ruby gem.  It is written in Coffeescript and CSS.
+        </p>
+      </div>
+      
+          <!--
+            WikiPath
+          -->
+      <div class="project">
+        <a href="https://github.com/asalani93/WikiPath" class="project-title">
+          WikiPath
+        </a>
+        
+        <p>
+                An application written in Racket for 91.301 (Organization of
+                Programming Languages).  It finds several semi-optimal paths between
+                any two arbitrary Wikipedia articles.  Due to a breaking change in a
+                recent version of Racket, the application is being rewritten in Rust.
+        </p>
+      </div>
+        </div>
+      <!--
+        Footer content.  This is removed from the flow of the document, so the
+        footer-spacer div is needed to fill the same space and prevent the
+        footer from overlapping page content.  That wouldn't look good.
+      -->
+      <div class="footer">
+        Copyright (c) 2015 Anthony Salani<br>
+        Header image is licensed under CC0/Public Domain<br>
+        Original image can be found <a href="https://pixabay.com/en/background-tube-pattern-structure-911803/">here </a>
+      </div>
+      <div class="footer-spacer">
+        <!-- Nothing should ever go here -->
+      </div>
+    </div>
+  </body>
+</html>

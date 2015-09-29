@@ -1,0 +1,265 @@
+@charset "utf-8";
+
+/*
+  File:  /~asalani/styles.css
+  91.461 Assignment:  Creating Your First Web Page
+  Anthony Salani, UMass Lowell Computer Science, asalani93@gmail.com
+  Copyright (c) 2015 by Anthony Salani.  All rights reserved.  May be freely 
+    copied or excerpted for any purpose with credit to the author.
+  Created by AAS on September 6, 2015
+
+  This is the stylesheet for the entire site
+*/
+
+/* border-box is much more convenient to work with that content-box */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  background-color: #F0F0F0;
+  font-family: Helvetica, sans-serif;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+  padding: 0;
+}
+
+/*
+  This is the title used at the top of the page, below the header image.
+*/
+h1 {
+  border-bottom: 1px solid #888888;
+  box-shadow: 0 10px 10px -12px rgba(0, 0, 0, 0.8);
+  font-size: 2.5em;
+  font-weight: bold;
+  margin: 0 0 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+/*
+  Some styling for links.
+  I had some styling for links when visited, but it didn't look as great.
+*/
+a {
+  color: #000088;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+
+/*
+  .header is the entire box at the top of the page that contains the nav bar and
+  the gigantic banner.
+*/
+.header {
+  background: url('/~asalani/img/banner1.jpg');
+  box-shadow: 0 -10px 30px 5px #000000;
+  height: 300px;
+  min-width: 1000px;
+  position: relative;
+}
+
+/*
+  .header-nav is the floating, transparent black navigation bar at the top of
+  the page.  It's position is set to fixed so it is stuck to the top of the
+  page as the user scrolls.
+*/
+.header-nav {
+  background-color: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  color: #EEEEEE;
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+}
+
+/*
+  .header-nav-center is just a div I'm using the center the items in the nav bar
+  to an area 1000px wide, without centering the contents of the nav bar.
+*/
+.header-nav-center {
+  margin: 0 auto;
+  width: 1000px;
+}
+
+/*
+  Restyles the unordered list tag to not have bullets, margin or padding for the
+  nav bar.
+*/
+.header-nav-center > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+  Restyles unorder list items to display horizontally
+*/
+.header-nav-center > ul > li {
+  /* The invisible border is so that the box is spaced properly without me
+  having to set a fixed height for each menu item.  It's hacky but it works
+  better than the alternative. */
+  border-bottom: 3px solid rgba(0, 0, 0, 0);
+  float: left;
+  height: 100%;
+  position: relative;
+  text-align: center;
+  width: 160px;
+}
+
+/*
+  This gives the buttons a nice blue underline on mouse over
+*/
+.header-nav-center > ul > li:hover {
+  background-color: #000000;
+  border-bottom: 3px solid #57F;
+}
+
+/*
+  Restyling link tags to fill the li tag that they're in so the entire button
+  region is clickable.
+*/
+.header-nav-center > ul > li > a {
+  color: #FFFFFF;
+  font-weight: normal;
+  display: block;
+  padding: 15px 25px 10px;
+  text-decoration: none;
+}
+
+.header-inner-menu {
+  background-color: rgba(0, 0, 0, 0.7);
+  max-height: 0;
+  list-style: none;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  top: 46px;
+  transition: max-height 0.5s ease-out;
+  width: 100%
+}
+
+.header-nav-center > ul > li:hover > .header-inner-menu { 
+  max-height: 500px;
+  transition: max-height 0.5s ease-in;
+}
+
+.header-inner-menu > li {
+  margin: 0;
+}
+
+.header-inner-menu > li > a {
+  color: #FFFFFF;
+  display: block;
+  font-weight: normal;
+  padding: 10px 25px 10px;
+  text-decoration: none;
+}
+
+.header-inner-menu > li > a:hover {
+  background-color: #000000;
+}
+
+/*
+  .content is the box containing the actual content of the site, and is centered
+  on the page.
+*/
+.content {
+  /* The height of the header is 320px, so this will set the content box to at
+  least fill the height of the page.  Leaving it at 100% causes the content box
+  to be massive. */
+  min-height: calc(100% - 320px);
+  margin: 20px auto 0;
+  position: relative;
+  width: 1000px;
+}
+/*
+  This is the region used by projects or assignments, so I can list them and
+  they'll look pretty.
+*/
+.project {
+  border-bottom: thin solid #CCCCCC;
+  margin: 15px 0;
+  padding: 15px 15px 30px;
+}
+
+/*
+  The title for an individual project box.  This is meant to style an anchor tag
+  which is why I set the text-decoration to none, and the display to block.
+*/
+.project-title {
+  color: #000000;
+  display: block;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  text-decoration: none;
+}
+
+.project-title:hover {
+  text-decoration: underline;
+}
+
+/*
+  The description for an individual project box.
+*/
+.project > p {
+  padding: 15px 0 15px 40px;
+}
+
+/*
+  Styling for blocks of text that aren't a summary for a link
+*/
+.headed-block {
+  padding: 15px 15px 15px;
+}
+
+.headed-block > h2 {
+  color: #000000;
+  display: block;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  text-decoration: none;
+}
+
+.headed-block > p, p.indented {
+  text-indent: 40px;
+}
+
+.headed-block > p {
+  padding-left: 40px;
+}
+
+/*
+  The page's footer.  It should float to the bottom of the page regardless of
+  how much content there is (even if there's not enough to fill the page)
+*/
+.footer {
+  bottom: 0;
+  font-size: 0.8em;
+  height: 100px;
+  padding-top: 10px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+
+/*
+  This is a spacer with the same height as the footer so that the footer doesn't
+  overlap the other text on the page.
+*/
+.footer-spacer {
+  height: 100px;
+}

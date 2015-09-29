@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<!--
+  File:  /~asalani/assignments.html
+  91.461 Assignment:  Creating Your First Web Page
+  Anthony Salani, UMass Lowell Computer Science, asalani93@gmail.com
+  Copyright (c) 2015 by Anthony Salani.  All rights reserved.  May be freely 
+    copied or excerpted for any purpose with credit to the author.
+  Created by AAS on September 6, 2015
+
+  This page list assignments for this class.
+-->
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Anthony Salani</title>
+    <link rel="stylesheet" type="text/css" href="/~asalani/css/styles.css" />
+  </head>
+  <body>
+
+<!--
+  Page header and navigation bar.
+  Navigation bar is positioned inside of the header for semantic reasons, but
+    will normally stay anchored to the top of the window, and move as the user
+    scrolls.
+  The header background is a large image because I like large images, despite
+    the potential negative impacts on user experience.  That's why I used a
+    small large image.
+-->
+
+    <div class="header">
+      <div class="header-nav">
+        <div class="header-nav-center">
+          <ul>
+            <li>
+              <a href="/~asalani">Home</a>
+            </li>
+            <li>
+              <a href="/~asalani/assignments.html">91.461</a>
+              <ul class="header-inner-menu">
+                <li>
+                  <a href="/~asalani/assignments.html">Assignment #2</a>
+                </li>
+                <li>
+                  <a href="/~asalani/assignment-3.html">Assignment #3</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/~asalani/projects.html">Projects</a>
+            </li>
+            <li>
+              <a href="https://github.com/asalani93" target="_blank">GitHub</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+<!--
+  Page content.
+  This will probably stay relatively blank because while it may look like one,
+    this page is not actually a blog.
+-->
+
+    <div class="content">
+        <h1>91.461 GUI Programming I Assignments</h1>
+        <p>
+          Everything here is an assignment from 91.461 (GUI Programming I).
+          Assignment 1 is omitted because it consisted of installing Apache on my
+          computer.
+        </p>
+      
+        <!--
+          A list of projects/assignments.
+        -->
+        <div class="projects-container">
+          <!--
+            Assignment #2
+          -->
+      <div class="project">
+       
+        <a href="/~asalani/index.html" class="project-title">
+          Assignment #2
+        </a>
+      
+        <p>
+                Note: The link just redirects to the home page of this site, because
+                this site is assignment #2.
+        </p>
+      </div>
+      
+          <!--
+            Assignment #3
+          -->
+      <div class="project">
+       
+        <a href="/~asalani/assignment-3.html" class="project-title">
+          Assignment #3
+        </a>
+      
+        <p>
+                This is a small page that shows show text styling, and explains what was
+                used on the rest of the site.
+        </p>
+      </div>
+        </div>
+      <!--
+        Footer content.  This is removed from the flow of the document, so the
+        footer-spacer div is needed to fill the same space and prevent the
+        footer from overlapping page content.  That wouldn't look good.
+      -->
+      <div class="footer">
+        Copyright (c) 2015 Anthony Salani<br>
+        Header image is licensed under CC0/Public Domain<br>
+        Original image can be found <a href="https://pixabay.com/en/background-tube-pattern-structure-911803/">here </a>
+      </div>
+      <div class="footer-spacer">
+        <!-- Nothing should ever go here -->
+      </div>
+    </div>
+  </body>
+</html>
