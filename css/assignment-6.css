@@ -1,0 +1,108 @@
+@charset "utf-8";
+
+/*
+  File:  /~asalani/assignment-6.css
+  91.461 Assignment: Creating an Interactive Dynamic Table
+  Anthony Salani, UMass Lowell Computer Science, asalani93@gmail.com
+  Copyright (c) 2015 by Anthony Salani.  All rights reserved.  May be freely 
+    copied or excerpted for any purpose with credit to the author.
+  Created by AAS on October 17, 2015
+
+  This is the stylesheet for the form and table in Assignment 6
+*/
+
+#input-form {
+  border-spacing: 0;
+  margin: 0 auto;
+}
+
+#input-form td {
+  padding: 5px;
+}
+
+#input-form td:nth-child(2n) {
+}
+
+#input-form td:nth-child(2n + 1) {
+}
+
+#input-form button {
+  background-color: #FFF;
+  border: 0px solid #57F;
+  border-bottom-width: 4px;
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-radius: 10px;
+  outline: none;
+  padding: 15px;
+}
+
+#input-form button:hover {
+  background-color: #DEF;
+}
+
+#input-form button:active {
+  background-color: #DEF;
+  border-bottom-width: 1px;
+  margin-top: 3px;
+}
+
+#input-button {
+  text-align: center;
+}
+
+#mult-table {
+  max-width: 1000px;
+  overflow: auto;
+}
+
+#mult-table > table {
+  border-spacing: 0;
+  margin: 0 auto;
+}
+
+#mult-table td {
+  padding: 4px;
+}
+
+#mult-table tr:nth-child(2n), #mult-table td:nth-child(2n) {
+  background-color: #E8E8E8;
+}
+
+#mult-table tr:nth-child(2n) > td:nth-child(2n) {
+  background-color: #E0E0E0;
+}
+
+#mult-table tr:first-child > td, #mult-table td:first-child {
+  background-color: #888888;
+  color: #FFF;
+}
+
+#validation-errors > ul, #validation-warnings > ul {
+  margin: 10px auto;
+  padding: 10px;
+  width: 600px;
+}
+
+#validation-errors > ul {
+  background-color: #FFC2B2;
+  border: 1px solid #DB4B4B;
+  color: #DB4B4B;
+}
+
+#validation-warnings > ul {
+  background-color: #E3E68C;
+  border: 1px solid #989C25;
+  color: #989C25;
+}
+
+#validation-errors li, #validation-warnings li {
+  margin-left: 20px;
+}
+
+#validation-errors li:first-child, #validation-warnings li:first-child {
+  font-weight: bold;
+  list-style: none;
+  margin-left: 0;
+}

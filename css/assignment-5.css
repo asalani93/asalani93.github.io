@@ -1,0 +1,80 @@
+@charset "utf-8";
+
+/*
+  File:  /~asalani/assignment-5.css
+  91.461 Assignment: Formatting Dynamic Text
+  Anthony Salani, UMass Lowell Computer Science, asalani93@gmail.com
+  Copyright (c) 2015 by Anthony Salani.  All rights reserved.  May be freely 
+    copied or excerpted for any purpose with credit to the author.
+  Created by AAS on October 4, 2015
+
+  This is the stylesheet for the lyrics in Assignment 5
+*/
+
+#song-info {
+  background-color: #E8E8E8;
+  border-radius: 15px;
+  box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.5);
+  margin: 50px auto;
+  padding: 50px 0;
+  text-align: center;
+  width: 700px;
+}
+
+#song-name {
+  font-size: 2.5em;
+  font-weight: bold;
+}
+
+#song-band, #song-album {
+  font-size: 1.4em;
+}
+
+#song-date {
+  font-style: italic;
+}
+
+#verse-container {
+  background-color: #E8E8E8;
+  border-radius: 15px;
+  box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.5);
+  margin: 50px auto;
+  overflow: hidden;
+  width: 700px;
+}
+
+.verse-block {
+  line-height: 175%;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.verse-block:nth-child(2n) {
+  background-color: #E0E0E0;
+}
+
+.verse-block:hover {
+  border-left: 3px solid #57F;
+  border-right: 3px solid #57F;
+}
+
+.chorus {
+  font-style: italic;
+  color: #000088;
+}
+
+.chorus:before, .verse:before {
+  font-size: 0.8em;
+  display: block;
+  font-style: normal;
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.chorus:before {
+  content: 'Chorus';
+}
+
+.verse:before {
+  content: 'Verse';
+}
