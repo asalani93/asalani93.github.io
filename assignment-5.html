@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 
 <!--
-  File:  /~asalani/index.html
-  91.461 Assignment:  Creating Your First Web Page
+  File:  /~asalani/assignment-5.html
+  91.461 Assignment: Formatting Dynamic Text
   Anthony Salani, UMass Lowell Computer Science, asalani93@gmail.com
   Copyright (c) 2015 by Anthony Salani.  All rights reserved.  May be freely 
     copied or excerpted for any purpose with credit to the author.
-  Created by AAS on September 6, 2015
+  Created by AAS on October 4, 2015
 
-  This is just the index page.
+  This page formats dynamically styled text pulled from a JSON file
 -->
 
 <html>
@@ -76,18 +76,18 @@
 -->
 
     <div class="content">
-        <h1>Welcome!</h1>
-        <p>
-          Hi!  I'm Anthony Salani, and I'm a senior at UMass Lowell.  I'm
-          currently majoring in Computer Science and minoring in Mathematics.  My
-          fields of interest are machine learning, computer vision, robotics, and
-          game development.
-        </p>
-        <p>
-          A lot of this site is sparse right now.  Most of the cool stuff is on
-          other pages.  Click the links up top to be brought to new and exciting
-          lands!
-        </p>
+        <h1>Assignment 5</h1>
+      
+        <div id="json-content"></div>
+      
+        <script src="/build/js/assignment-5.js"></script>
+      
+        <!--
+          The stylesheet is linked down here because I template the rest of the page
+          with Handlebars, so I'm not duplicating a ton of code.  However, you need
+          to add a 'property="stylesheet"' attribute to the tag or it won't validate.
+        -->
+        <link rel="stylesheet" property="stylsheet" type="text/css" href="/build/css/assignment-5.css" />
       <!--
         Footer content.  This is removed from the flow of the document, so the
         footer-spacer div is needed to fill the same space and prevent the
