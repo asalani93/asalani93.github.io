@@ -21,10 +21,15 @@
     initializeForm();
     setUpValidator();
     if (hasParameters()) {
+      // We have all of the parameters, so we can start validating
+      // There's no normal way for the URL to end up with partial values, so
+      //   this works fine
       if ($('#input-form').valid()) {
         window.setTimeout(generateTable);
       }
     } else {
+      // The validation hasn't actually run yet, here
+      // Therefore, we need to manually hide the error box
       $('#validation-errors').hide();
     }
 
@@ -54,29 +59,38 @@
   var setUpValidator = function() {
     // A custom validator to tell if the user is making a really big table
     $.validator.addMethod('max_size', function(value, element, params) {
+      // Parse and store the text field contents
       var lx = Number($('#input-lx').val().trim());
       var ly = Number($('#input-ly').val().trim());
       var tx = Number($('#input-tx').val().trim());
       var ty = Number($('#input-ty').val().trim());
 
+      // Determine the range of numbers
       var lRange = Math.abs(lx - ly);
       var tRange = Math.abs(tx - ty);
 
+      // If anything is NaN (invalid) or the range is small enough, return true
+      // Otherwise, return false
       return ((lRange * tRange) <= params) || isNaN(lRange * tRange);
     }, 'Size of table is too large');
 
+    // A custom validator to tell if the numbers are reversed.  If they are,
+    //   we'll treat it as an error because I can't figure out how to convey
+    //   warnings (ie: non-interrupting messages) to the user.
     $.validator.addMethod('reversed', function(value, element, params) {
       var l = Number($(params).val().trim());
       var r = Number(value.trim());
 
       if (isNaN(l) || isNaN(r)) {
-        console.log(params, 'a');
+        // If one of the numbers is not valid, don't bother showing an error
+        // One will already be facing the user, and it wouldn't make sense to
+        //   tell them that an unentered value is reversed.
         return true;
       } else if (l > r) {
-        console.log(params, 'b');
+        //  If the values are both numbers and are in reverse order, complain
         return false;
       } else {
-        console.log(params, 'c');
+        // Things are good
         return true;
       }
     }, 'Values are reversed');
@@ -129,8 +143,7 @@
       errorElement: 'span',
       errorLabelContainer: '#validation-errors > ul',
       onkeyup: false,
-      onfocusout: false,
-      //highlight: function()
+      onfocusout: false
     });
   };
 
