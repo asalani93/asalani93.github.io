@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 
 <!--
-  File:  /~asalani/assignment-6.html
+  File:  /~asalani/assignment-7.html
   91.461 Assignment: Creating an Interactive Dynamic Table
   Anthony Salani, UMass Lowell Computer Science, asalani93@gmail.com
   Copyright (c) 2015 by Anthony Salani.  All rights reserved.  May be freely 
     copied or excerpted for any purpose with credit to the author.
-  Created by AAS on October 17, 2015
+  Created by AAS on November 4, 2015
 
-  This page formats dynamically styled text pulled from a JSON file
+  This page formats dynamically styled text pulled from a JSON file, and
+  validates using the JQuery Validation plugin.
 -->
 
 <html>
@@ -22,9 +23,11 @@
   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="//js/underscore-min.js"></script>
   <link rel="stylesheet" type="text/css" href="//css/styles.css" />
-    <script src="//js/assignment-6.js"></script>
-    <link rel="stylesheet" property="stylsheet" type="text/css" href="//css/assignment-6.css" />
+  <script src="//js/assignment-7.js"></script>
+  <script src="//js/jquery.validate.min.js"></script>
+  <link rel="stylesheet" property="stylsheet" type="text/css" href="//css/assignment-7.css" />
 </head>
+
 <!--
   Body block - generated from file layout-body.hbs
 -->
@@ -88,47 +91,47 @@ This will probably stay relatively blank because while it may look like one,
 -->
 
   <div class="content">
-      <h1>Assignment 6</h1>
+    <h1>Assignment 7</h1>
     
-      <!-- this is where the validation errors go -->
-      <div id="validation-errors"></div>
+    <!-- this is where the validation errors go -->
+    <div id="validation-errors">
+      <ul>
+        <li>Errors:</li>
+      </ul>
+    </div>
     
-      <!-- this is where the validations warnings go -->
-      <div id="validation-warnings"></div>
-    
-      <!-- input form for creating the table -->
-      <form method="get">
-        <table id="input-form">
-          <tr>
-            <td>Multiplier 1</td>
-            <td>
-              <input id="input-tx" name="tx" />
-            </td>
-            <td>Multiplier 2</td>
-            <td>
-              <input id="input-ty" name="ty" />
-            </td>
-          </tr>
-          <tr>
-            <td>Multiplicand 1</td>
-            <td>
-              <input id="input-lx" name="lx" />
-            </td>
-            <td>Multiplicand 2</td>
-            <td>
-              <input id="input-ly" name="ly" />
-            </td>
-          </tr>
-          <tr>
-            <td colspan="4" id="input-button">
-              <button type="submit">Calculate</button>
-            </td>
-          </tr>
-        </table>
-      </form>
-    
-      <!-- the actual multiplication table -->
-      <div id="mult-table"></div>
+    <!-- input form for creating the table -->
+    <form id="input-form" method="get">
+      <table id="input-table">
+        <tr>
+          <td>Multiplier 1</td>
+          <td>
+            <input id="input-tx" name="tx" />
+          </td>
+          <td>Multiplier 2</td>
+          <td>
+            <input id="input-ty" name="ty" />
+          </td>
+        </tr>
+        <tr>
+          <td>Multiplicand 1</td>
+          <td>
+            <input id="input-lx" name="lx" />
+          </td>
+          <td>Multiplicand 2</td>
+          <td>
+            <input id="input-ly" name="ly" />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4" id="input-button">
+            <button type="submit">Calculate</button>
+          </td>
+        </tr>
+      </table>
+    </form>
+    <!-- the actual multiplication table -->
+    <div id="mult-table"></div>
     <!--
       Footer content.  This is removed from the flow of the document, so the
       footer-spacer div is needed to fill the same space and prevent the

@@ -12,14 +12,23 @@
 -->
 
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Anthony Salani</title>
-    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="/js/underscore-min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
-  </head>
-  <body>
+
+<!--
+  Head block - generated from file layout-head.hbs
+-->
+<head>
+  <meta charset="UTF-8">
+  <title>Anthony Salani</title>
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="//js/underscore-min.js"></script>
+  <link rel="stylesheet" type="text/css" href="//css/styles.css" />
+    <script src="//js/assignment-5.js"></script>
+    <link rel="stylesheet" property="stylsheet" type="text/css" href="//css/assignment-5.css" />
+</head>
+<!--
+  Body block - generated from file layout-body.hbs
+-->
+<body>
 
 <!--
   Page header and navigation bar.
@@ -31,76 +40,70 @@
     small large image.
 -->
 
-    <div class="header">
-      <div class="header-nav">
-        <div class="header-nav-center">
-          <ul>
-            <li>
-              <a href="">Home</a>
-            </li>
-            <li>
-              <a href="/assignments.html">91.461</a>
-              <ul class="header-inner-menu">
-                <li>
-                  <a href="/assignments.html">Assignment #2</a>
-                </li>
-                <li>
-                  <a href="/assignment-3.html">Assignment #3</a>
-                </li>
-                <li>
-                  <a href="http://asalani93.github.io/">Assignment #4</a>
-                </li>
-                <li>
-                  <a href="/assignment-5.html">Assignment #5</a>
-                </li>
-                <li>
-                  <a href="/assignment-6.html">Assignment #6</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a href="/projects.html">Projects</a>
-            </li>
-            <li>
-              <a href="https://github.com/asalani93" target="_blank">GitHub</a>
-            </li>
-          </ul>
-        </div>
+  <div class="header">
+    <div class="header-nav">
+      <div class="header-nav-center">
+        <ul>
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a href="//assignments.html">91.461</a>
+            <ul class="header-inner-menu">
+              <li>
+                <a href="//assignments.html">Assignment #2</a>
+              </li>
+              <li>
+                <a href="//assignment-3.html">Assignment #3</a>
+              </li>
+              <li>
+                <a href="http://asalani93.github.io/">Assignment #4</a>
+              </li>
+              <li>
+                <a href="//assignment-5.html">Assignment #5</a>
+              </li>
+              <li>
+                <a href="//assignment-6.html">Assignment #6</a>
+              </li>
+              <li>
+                <a href="//assignment-7.html">Assignment #7</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="//projects.html">Projects</a>
+          </li>
+          <li>
+            <a href="https://github.com/asalani93" target="_blank">GitHub</a>
+          </li>
+        </ul>
       </div>
     </div>
+  </div>
 
 <!--
-  Page content.
-  This will probably stay relatively blank because while it may look like one,
-    this page is not actually a blog.
+Page content.
+This will probably stay relatively blank because while it may look like one,
+  this page is not actually a blog.
 -->
 
-    <div class="content">
-        <h1>Assignment 5</h1>
-      
-        <div id="json-content"></div>
-      
-        <script src="/js/assignment-5.js"></script>
-      
-        <!--
-          The stylesheet is linked down here because I template the rest of the page
-          with Handlebars, so I'm not duplicating a ton of code.  However, you need
-          to add a 'property="stylesheet"' attribute to the tag or it won't validate.
-        -->
-        <link rel="stylesheet" property="stylsheet" type="text/css" href="/css/assignment-5.css" />
-      <!--
-        Footer content.  This is removed from the flow of the document, so the
-        footer-spacer div is needed to fill the same space and prevent the
-        footer from overlapping page content.  That wouldn't look good.
-      -->
-      <div class="footer">
-        Copyright (c) 2015 Anthony Salani<br>
-        Header image is licensed under CC0/Public Domain<br>
-        Original image can be found <a href="https://pixabay.com/en/background-tube-pattern-structure-911803/">here </a>
-      </div>
-      <div class="footer-spacer">
-        <!-- Nothing should ever go here -->
-      </div>
+  <div class="content">
+      <h1>Assignment 5</h1>
+      <div id="json-content"></div>
+    <!--
+      Footer content.  This is removed from the flow of the document, so the
+      footer-spacer div is needed to fill the same space and prevent the
+      footer from overlapping page content.  That wouldn't look good.
+    -->
+    <div class="footer">
+      Copyright (c) 2015 Anthony Salani<br>
+      Header image is licensed under CC0/Public Domain<br>
+      Original image can be found <a href="https://pixabay.com/en/background-tube-pattern-structure-911803/">here </a>
     </div>
-  </body>
+    <div class="footer-spacer">
+      <!-- Nothing should ever go here -->
+    </div>
+  </div>
+</body>
+
 </html>
