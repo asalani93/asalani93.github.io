@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
 <!--
-  File:  /~asalani/assignment-7.html
+  File:  /~asalani/assignment-8.html
   91.461 Assignment: Creating an Interactive Dynamic Table
   Anthony Salani, UMass Lowell Computer Science, asalani93@gmail.com
   Copyright (c) 2015 by Anthony Salani.  All rights reserved.  May be freely 
     copied or excerpted for any purpose with credit to the author.
-  Created by AAS on November 4, 2015
+  Created by AAS on November 18, 2015
 
   This page formats dynamically styled text pulled from a JSON file, and
   validates using the JQuery Validation plugin.
@@ -23,9 +23,16 @@
   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="/js/underscore-min.js"></script>
   <link rel="stylesheet" type="text/css" href="/css/styles.css" />
-  <script src="/js/assignment-7.js"></script>
+  <!-- Include jQuery UI files -->
+  <!--script src="/jquery-ui-1.11.4/external/jquery.jquery.js"></script-->
+  <script src="/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/jquery-ui-1.11.4/jquery-ui.structure.min.css" />
+  <link rel="stylesheet" type="text/css" href="/jquery-ui-1.11.4/jquery-ui.theme.min.css" />
+  <!-- Include jQuery Validation Plugin -->
   <script src="/js/jquery.validate.min.js"></script>
-  <link rel="stylesheet" property="stylsheet" type="text/css" href="/css/assignment-7.css" />
+  <!-- Include my own files -->
+  <script src="/js/assignment-8.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/assignment-8.css" />
 </head>
 
 <!--
@@ -94,7 +101,7 @@ This will probably stay relatively blank because while it may look like one,
 -->
 
   <div class="content">
-    <h1>Assignment 7</h1>
+    <h1>Assignment 8</h1>
     
     <!-- this is where the validation errors go -->
     <div id="validation-errors">
@@ -106,35 +113,69 @@ This will probably stay relatively blank because while it may look like one,
     <!-- input form for creating the table -->
     <form id="input-form" method="get">
       <table id="input-table">
+        <!-- Row for multiplier labels and text boxes -->
         <tr>
           <td>Multiplier 1</td>
           <td>
-            <input id="input-tx" name="tx" />
+            <input id="input-tx" class="textbox" name="tx" data-bind="slider-tx" autocomplete="off" />
           </td>
           <td>Multiplier 2</td>
           <td>
-            <input id="input-ty" name="ty" />
+            <input id="input-ty" class="textbox" name="ty" data-bind="slider-ty" autocomplete="off" />
           </td>
         </tr>
+    
+        <!-- jQuery UI sliders to change multiplier text boxes-->
+        <tr>
+          <td colspan="2">
+            <div id="slider-tx" class="slider" data-bind="input-tx"></div>
+          </td>
+          <td colspan="2">
+            <div id="slider-ty" class="slider" data-bind="input-ty"></div>
+          </td>
+        </tr>
+    
+        <!-- Row for multiplicand labels and text boxes -->
         <tr>
           <td>Multiplicand 1</td>
           <td>
-            <input id="input-lx" name="lx" />
+            <input id="input-lx" class="textbox" name="lx" data-bind="slider-lx" autocomplete="off" />
           </td>
           <td>Multiplicand 2</td>
           <td>
-            <input id="input-ly" name="ly" />
+            <input id="input-ly" class="textbox" name="ly" data-bind="slider-ly" autocomplete="off" />
           </td>
         </tr>
+    
+        <!-- jQuery UI sliders to change multiplicand text boxes-->
         <tr>
-          <td colspan="4" id="input-button">
-            <button type="submit">Calculate</button>
+          <td colspan="2">
+            <div id="slider-lx" class="slider" data-bind="input-lx"></div>
+          </td>
+          <td colspan="2">
+            <div id="slider-ly" class="slider" data-bind="input-ly"></div>
+          </td>
+        </tr>
+    
+        <!-- Calculate and clear buttons -->
+        <tr id="input-button">
+          <!-- each button is in its own <td> because otherwise they'd push each other down -->
+          <td colspan="2">
+            <button id="btn-save" type="submit">Save</button>
+          </td>
+          <td colspan="2">
+            <button id="btn-clear">Clear All</button>
           </td>
         </tr>
       </table>
     </form>
-    <!-- the actual multiplication table -->
-    <div id="mult-table"></div>
+    
+    <!-- tabs for the multiplication tables -->
+    <div id="mult-tabs">
+      <!-- list of tabs, starts with the current tab -->
+      <ul id="mult-tabs-bar">
+      </ul>
+    </div>
     <!--
       Footer content.  This is removed from the flow of the document, so the
       footer-spacer div is needed to fill the same space and prevent the
