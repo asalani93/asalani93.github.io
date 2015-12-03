@@ -104,8 +104,25 @@ window.Hand.prototype.remove = function(letter) {
 window.Hand.prototype.render = function() {
   this.$html.empty();
 
-  this.hand.forEach(function(x) {
-    this.$html.append($('<div>' + x + '</div>'));
+  var handWidth = 230;
+  var tileWidth = 43;
+  var tileYOffset = 43;
+  var tileYSpacing = 10;
+  var left = (handWidth / 2) - (tileWidth / 2);
+
+  this.hand.forEach(function(x, idx) {
+    var top = tileYOffset + tileYSpacing * idx + tileWidth * idx;
+    var $tile = $('<div>', {
+      'class': 'tile tile-' + x,
+      'style': 'left: ' + left + 'px; top: ' + top + 'px;'
+    });
+
+    $tile.draggable({
+      containment: '#mat',
+      stop: this.dragStop
+    });
+
+    this.$html.append($tile);
   }, this);
 };
 

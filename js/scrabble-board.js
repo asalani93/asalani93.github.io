@@ -79,17 +79,20 @@ window.Board = function($html) {
       var ty = Math.floor(place[3] / 47);
 
       // unstage the current piece
+      // needs to be done or else tile staging won't allow you to change axis w/ 2 pieces
       var letter = that.unstageTile(ox, oy);
-
       // try to stage the tile to it's new location
-      var stageRes = that.stageTile(tx, ty, letter);
+      var stageRes = that.stageTile(tx, ty, letter, false);
 
-      if (stageRes === false) {
+      if (stageRes !== null) {
         // this is the case where we try to stage a tile over an existing tile
         // this not a valid spot, move the tile back to it's home
         var x = ui.originalPosition.left;
         var y = ui.originalPosition.top;
-        
+
+        // unstage the current piece
+        var letter = that.stageTile(ox, oy, letter, false);
+
         ui.helper.draggable('disable');
         ui.helper.animate({
           left: x + 'px',
@@ -97,39 +100,25 @@ window.Board = function($html) {
         }, {
           complete: function() {
             ui.helper.draggable('enable');
+          that.renderStagedTiles();
           }
         });
-        return;
-      } else if (stageRes !== null) {
-        console.log('poop');
-        // if we're placing a tile over another tile, move it to where we started from
-        that.stageTile(ox, oy, stageRes);
-
-        // find the overlapped tile by its position
-        var q = '#staged-tiles > .tile[style*="left: ' + (place[2] + 2) + 'px"][style*="top: ' + (place[3] + 2) + 'px"]';
-        var $tile = $(q);
-
-        $tile.draggable('disable');
-        $tile.animate({
-          left: ui.originalPosition.left,
-          top: ui.originalPosition.top
+      } else {
+        // unstage the current piece
+        if (ox !== tx && oy !== ty) {
+          that.unstageTile(ox, oy);
+        }
+        ui.helper.draggable('disable');
+        ui.helper.animate({
+          left: (place[2] + 2) + 'px',
+          top: (place[3] + 2) + 'px'
         }, {
           complete: function() {
-            $tile.draggable('enable');
+            ui.helper.draggable('enable');
+            that.renderStagedTiles();
           }
         });
       }
-
-      ui.helper.draggable('disable');
-      ui.helper.animate({
-        left: (place[2] + 2) + 'px',
-        top: (place[3] + 2) + 'px'
-      }, {
-        complete: function() {
-          console.log('abacus');
-          ui.helper.draggable('enable');
-        }
-      });
     } else {
       // there are no active regions, move the tile back to it's home
       var x = ui.originalPosition.left;
@@ -169,9 +158,12 @@ window.Board = function($html) {
 };
 
 // place a tile on the board and get it ready for commiting
-window.Board.prototype.stageTile = function(x, y, letter) {
+window.Board.prototype.stageTile = function(x, y, letter, swapStaged) {
   if (this.placedTiles[pos(x, y)] != null) {
     // this spot is currently occupied by a permanently placed tile
+    return false;
+  } else if (this.placedTiles[pos(x, y)] != null && !swapStaged) {
+    // don't swap two staged tiles
     return false;
   } else {
     var positions = getPositions(this.stagedTiles).concat([[x, y]]);
@@ -338,7 +330,7 @@ window.Board.prototype.renderPlacedTiles = function() {
 
     var position = posInv(idx);
     var $tile = $('<div>', {
-      'class': 'tile',
+      'class': 'tile tile-' + x,
       'style': 'left: ' + (position[0] * 47 + 2) + 'px; top: ' + (position[1] * 47 + 2) + 'px;'
     });
     $placedTiles.append($tile);
@@ -364,7 +356,7 @@ window.Board.prototype.renderStagedTiles = function() {
 
     var position = posInv(idx);
     var $tile = $('<div>', {
-      'class': 'tile',
+      'class': 'tile tile-' + x,
       'style': 'left: ' + (position[0] * 47 + 2) + 'px; top: ' + (position[1] * 47 + 2) + 'px;'
     });
 

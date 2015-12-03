@@ -77,7 +77,6 @@ body {
 /* Container for letter tiles */
 #board > #placed-tiles {
   position: absolute;
-  z-index: 11;
 }
 
 /* Letter tiles */
@@ -87,12 +86,12 @@ body {
   height: 43px;
   position: absolute;
   width: 43px;
+  z-index: 11;
 }
 
 /* Container for letter tiles not yet permanently placed */
 #board > #staged-tiles {
   position: absolute;
-  z-index: 21;
 }
 
 /* Letter tiles not yet permanently placed */
@@ -102,6 +101,7 @@ body {
   height: 43px;
   position: absolute !important;
   width: 43px;
+  z-index: 12;
 }
 
 /* Currently moving staged tiles */
@@ -137,3 +137,46 @@ body {
   position: absolute;
   width: 230px;
 }
+
+#pane-r > .tile {
+  background-color: #DDD;
+  border: 1px solid #000;
+  height: 43px;
+  position: absolute !important;
+  width: 43px;
+  z-index: 13;
+}
+
+/* Currently moving staged tiles */
+#pane-r > .tile.ui-draggable-dragging {
+  z-index: 22;
+}
+
+/* CSS for styling each tile correctly */
+.tile.tile-a::before { content: 'A'; }
+.tile.tile-b::before { content: 'B'; }
+.tile.tile-c::before { content: 'C'; }
+.tile.tile-d::before { content: 'D'; }
+.tile.tile-e::before { content: 'E'; }
+.tile.tile-f::before { content: 'F'; }
+.tile.tile-g::before { content: 'G'; }
+.tile.tile-h::before { content: 'H'; }
+.tile.tile-i::before { content: 'I'; }
+.tile.tile-j::before { content: 'J'; }
+.tile.tile-k::before { content: 'K'; }
+.tile.tile-l::before { content: 'L'; }
+.tile.tile-m::before { content: 'M'; }
+.tile.tile-n::before { content: 'N'; }
+.tile.tile-o::before { content: 'O'; }
+.tile.tile-p::before { content: 'P'; }
+.tile.tile-q::before { content: 'Q'; }
+.tile.tile-r::before { content: 'R'; }
+.tile.tile-s::before { content: 'S'; }
+.tile.tile-t::before { content: 'T'; }
+.tile.tile-u::before { content: 'U'; }
+.tile.tile-v::before { content: 'V'; }
+.tile.tile-w::before { content: 'W'; }
+.tile.tile-x::before { content: 'X'; }
+.tile.tile-y::before { content: 'Y'; }
+.tile.tile-z::before { content: 'Z'; }
+.tile.tile-_::before { content: '_'; }
