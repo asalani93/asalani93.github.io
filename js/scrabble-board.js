@@ -35,7 +35,7 @@ window.Board = function($html) {
     4, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 4,
     0, 3, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 3, 0,
     0, 0, 3, 0, 0, 0, 1, 0, 1, 0, 0, 0, 3, 0, 0,
-    1, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 3, 0, 0, 0,
+    1, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 3, 0, 0, 1,
     0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0,
     0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0,
     0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0,
@@ -43,7 +43,7 @@ window.Board = function($html) {
     0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0,
     0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0,
     0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0,
-    1, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 3, 0, 0, 0,
+    1, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 3, 0, 0, 1,
     0, 0, 3, 0, 0, 0, 1, 0, 1, 0, 0, 0, 3, 0, 0,
     0, 3, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 3, 0,
     4, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 4
@@ -91,48 +91,26 @@ window.Board = function($html) {
         var y = ui.originalPosition.top;
 
         // unstage the current piece
-        var letter = that.stageTile(ox, oy, letter, false);
-
-        ui.helper.draggable('disable');
-        ui.helper.animate({
-          left: x + 'px',
-          top: y + 'px'
-        }, {
-          complete: function() {
-            ui.helper.draggable('enable');
-          that.renderStagedTiles();
-          }
-        });
+        that.stageTile(ox, oy, letter, false);
+        slideTo(ui.helper, that, x, y);
       } else {
         // unstage the current piece
         if (ox !== tx && oy !== ty) {
           that.unstageTile(ox, oy);
         }
-        ui.helper.draggable('disable');
-        ui.helper.animate({
-          left: (place[2] + 2) + 'px',
-          top: (place[3] + 2) + 'px'
-        }, {
-          complete: function() {
-            ui.helper.draggable('enable');
-            that.renderStagedTiles();
-          }
-        });
+        slideTo(ui.helper, that, place[2] + 2, place[3] + 2);
       }
     } else {
       // there are no active regions, move the tile back to it's home
       var x = ui.originalPosition.left;
       var y = ui.originalPosition.top;
-      
-      ui.helper.animate({
-        left: x + 'px',
-        top: y + 'px'
-      });
+      slideTo(ui.helper, that, x, y);
     }
 
     // clear the current drop targets
     that.dropTargets = {};
   };
+
   // jQuery UI event handler for when a square has a tile moved into it
   this.dropActivate = function(event, ui) {
     // figure out if we're currently in an occupied tile

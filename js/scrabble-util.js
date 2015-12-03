@@ -181,3 +181,16 @@ var spanToEdge = function(board, idx, axis) {
     });
   }
 };
+
+var slideTo = function($tile, board, x, y) {
+  $tile.draggable('disable');
+  $tile.animate({
+    left: x + 'px',
+    top: y + 'px'
+  }, {
+    complete: function() {
+      $tile.draggable('enable');
+      board.renderStagedTiles();
+    }
+  });
+};
