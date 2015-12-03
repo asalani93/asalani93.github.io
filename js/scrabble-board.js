@@ -90,21 +90,22 @@ window.Board = function($html) {
         var x = ui.originalPosition.left;
         var y = ui.originalPosition.top;
 
-        // unstage the current piece
+        // restage the current piece
         that.stageTile(ox, oy, letter, false);
-        slideTo(ui.helper, that, x, y);
+        slideBoardToBoard(ui.helper, that, x, y);
       } else {
         // unstage the current piece
         if (ox !== tx && oy !== ty) {
+          // if we're dropping where we started, don't unstage the tile already there
           that.unstageTile(ox, oy);
         }
-        slideTo(ui.helper, that, place[2] + 2, place[3] + 2);
+        slideBoardToBoard(ui.helper, that, place[2] + 2, place[3] + 2);
       }
     } else {
       // there are no active regions, move the tile back to it's home
       var x = ui.originalPosition.left;
       var y = ui.originalPosition.top;
-      slideTo(ui.helper, that, x, y);
+      slideBoardToBoard(ui.helper, that, x, y);
     }
 
     // clear the current drop targets

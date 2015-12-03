@@ -182,7 +182,7 @@ var spanToEdge = function(board, idx, axis) {
   }
 };
 
-var slideTo = function($tile, board, x, y) {
+var slideBoardToBoard = function($tile, board, x, y) {
   $tile.draggable('disable');
   $tile.animate({
     left: x + 'px',
@@ -191,6 +191,20 @@ var slideTo = function($tile, board, x, y) {
     complete: function() {
       $tile.draggable('enable');
       board.renderStagedTiles();
+    }
+  });
+};
+
+var slideHandToBoard = function($tile, board, hand, x, y) {
+  $tile.draggable('disable');
+  $tile.animate({
+    left: x + 'px',
+    top: y + 'px'
+  }, {
+    complete: function() {
+      $tile.draggable('enable');
+      board.renderStagedTiles();
+      hand.render();
     }
   });
 };
