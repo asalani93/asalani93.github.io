@@ -1,0 +1,139 @@
+@charset "utf-8";
+
+/*
+  File:  /~asalani/css/scrabble.css
+  91.461 Assignment 9: Implementing a Bit of Scrabble
+  Anthony Salani, UMass Lowell Computer Science, asalani93@gmail.com
+  Copyright (c) 2015 by Anthony Salani.  All rights reserved.  May be freely 
+    copied or excerpted for any purpose with credit to the author.
+  Created by AAS on November 25, 2015
+
+  Provides scrabble and scrabble-related services.
+*/
+
+body {
+  background-color: #000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Where the scrabble pieces are laid out. Should be centered in the mat. */
+#board {
+  background-color: #0F0;
+  height: 705px;
+  left: 250px;
+  position: absolute;
+  width: 705px;
+}
+
+/* Where all of the squares go */
+#board > #squares {
+  position: absolute;
+  z-index: 1;
+}
+
+/* A location on the board to place a Scrabble tile */
+#board > #squares > .square {
+  background-color: #FFF;
+  border: 1px dotted #BBB;
+  float: left;
+  height: 47px;
+  padding: 1px;
+  width: 47px;
+}
+
+/* The square with the star on it that denotes the starting location. */
+#board > #squares > .square.star {
+  background-color: #F88;
+  border-color: #080;
+}
+
+/* Squares that multiply the letter score by 2. */
+#board > #squares > .square.ltr2 {
+  background-color: #88F;
+  border-color: #008;
+}
+
+/* Squares that multiply the letter score by 3. */
+#board > #squares > .square.ltr3 {
+  background-color: #00F;
+  border-color: #008;
+}
+
+/* Squares that multiply the word score by 2. */
+#board > #squares > .square.wrd2 {
+  background-color: #F88;
+  border-color: #800;
+}
+
+/* Squares that multiply the word score by 3. */
+#board > #squares > .square.wrd3 {
+  background-color: #F00;
+  border-color: #800;
+}
+
+/* Container for letter tiles */
+#board > #placed-tiles {
+  position: absolute;
+  z-index: 11;
+}
+
+/* Letter tiles */
+#board > #placed-tiles > .tile {
+  background-color: #FFF;
+  border: 1px solid #000;
+  height: 43px;
+  position: absolute;
+  width: 43px;
+}
+
+/* Container for letter tiles not yet permanently placed */
+#board > #staged-tiles {
+  position: absolute;
+  z-index: 21;
+}
+
+/* Letter tiles not yet permanently placed */
+#board > #staged-tiles > .tile {
+  background-color: #DDD;
+  border: 1px solid #000;
+  height: 43px;
+  position: absolute !important;
+  width: 43px;
+}
+
+/* Currently moving staged tiles */
+#board > #staged-tiles > .tile.ui-draggable-dragging {
+  z-index: 22;
+}
+
+/* Setting for the board and the other UI elements. The board is center, the menu is left, and the controls are right. */
+#mat {
+  bottom: 0;
+  height: 705px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 1200px;
+}
+
+/* Location for the menu and score UI components. */
+#pane-l {
+  background-color: #F00;
+  height: 705px;
+  position: absolute;
+  width: 230px;
+}
+
+/* Location for your current list of letters. */
+#pane-r {
+  background-color: #00F;
+  height: 705px;
+  left: 970px;
+  position: absolute;
+  width: 230px;
+}
