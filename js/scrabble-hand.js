@@ -64,8 +64,6 @@ window.Hand = function($html, board) {
       return l[1] - r[1];
     });
 
-    console.log(locations);
-
     if (locations.length > 0) {
       // translate the piece to the closest location if there is one
       var place = locations[0];
