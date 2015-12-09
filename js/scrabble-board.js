@@ -13,16 +13,25 @@
 
 "use strict";
 
-window.Board = function($html) {
+window.Board = function($html, hand) {
   // so we can axis this from the draggable event handlers
   var that = this;
 
   // the DOM element referring to the board (jQuery object)
   this.$html = $html;
+
   // tiles that have been placed on the board
   this.placedTiles = _.range(15 * 15).map(function() {return null;});
+
   // tiles that are ready to be placed on the board
   this.stagedTiles = _.range(15 * 15).map(function() {return null;});
+
+  // the tile rack
+  this.hand = hand;
+
+  // the callback for when a tile is staged
+  this.cb = null;
+
   // how to arrange the squares on the board
   // each row is 15 long
   // 0 = nothing
@@ -39,7 +48,7 @@ window.Board = function($html) {
     0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0,
     0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0,
     0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0,
-    4, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 4,
+    4, 0, 0, 1, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0, 4,
     0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0,
     0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0,
     0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0,
@@ -48,13 +57,33 @@ window.Board = function($html) {
     0, 3, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 3, 0,
     4, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 4
   ];
+
   // which number corresponds to which class
   this.squareClasses = ['', 'ltr2', 'ltr3', 'wrd2', 'wrd3', 'star'];
 
   // places where we can currently drop the moving tile
   this.dropTargets = {};
+
   // jQuery UI event handler for letting go of a tile
   this.dragStop = function(event, ui) {
+    var $tile = $(event.target);
+    var x = $tile.offset().left + ($tile.outerWidth() / 2);
+    var $board = $('#board');
+    var $tileRack = $('#pane-r');
+    var boardRightEdge = Math.abs($board.offset().left + $board.outerWidth() - x);
+    var tileRackLeftEdge = Math.abs($tileRack.offset().left - x);
+
+    if (boardRightEdge < tileRackLeftEdge) {
+      // we dropped closer to the board
+      that.dragStopBoard(event, ui);
+    } else {
+      // we dropped closer to the thing that holds all the tiles
+      that.dragStopTileRack(event, ui);
+    }
+  };
+
+  // called by dragStop when the tile is dropped closer to the board
+  this.dragStopBoard = function(event, ui) {
     var locations = Object.keys(that.dropTargets).map(function(x) {
       // add a bit of info to each drop target containing the euclidean distance
       // to the target
@@ -80,9 +109,9 @@ window.Board = function($html) {
 
       // unstage the current piece
       // needs to be done or else tile staging won't allow you to change axis w/ 2 pieces
+      // then try to stage the tile to it's new location
       var letter = that.unstageTile(ox, oy);
-      // try to stage the tile to it's new location
-      var stageRes = that.stageTile(tx, ty, letter, false);
+      var stageRes = that.stageTile(tx, ty, letter);
 
       if (stageRes !== null) {
         // this is the case where we try to stage a tile over an existing tile
@@ -91,7 +120,7 @@ window.Board = function($html) {
         var y = ui.originalPosition.top;
 
         // restage the current piece
-        that.stageTile(ox, oy, letter, false);
+        that.stageTile(ox, oy, letter);
         slideBoardToBoard(ui.helper, that, x, y);
       } else {
         // unstage the current piece
@@ -112,6 +141,62 @@ window.Board = function($html) {
     that.dropTargets = {};
   };
 
+  // called by dragStop when the tile is dropped closer to the tile rack
+  this.dragStopTileRack = function(event, ui) {
+    var locations = Object.keys(that.hand.dropTargets).map(function(x) {
+      // add a bit of info to each drop target containing the euclidean distance
+      // to the target
+      var $drop = $('#' + x);
+      var x = $drop.offset().left;
+      var y = $drop.offset().top;
+      var dx = ui.offset.left - x;
+      var dy = ui.offset.top  - y;
+      var distance = Math.sqrt(dx * dx + dy * dy);
+      return [$drop, distance, x, y];
+    }).sort(function(l, r) {
+      // find the droppable location that is the closest to the tile
+      return l[1] - r[1];
+    });
+
+    if (locations.length > 0) {
+      // translate the piece to the closest location if there is one
+      var place = locations[0];
+      var ox = Math.floor(ui.originalPosition.left / 47);
+      var oy = Math.floor(ui.originalPosition.top / 47);
+      var tx = place[0].index();
+
+      // unstage the current piece
+      // needs to be done or else tile staging won't allow you to change axis w/ 2 pieces
+      // then try to stage the tile to it's new location
+      var letter = that.unstageTile(ox, oy);
+      var stageRes = that.hand.addByIndex(tx, letter);
+
+      if (stageRes) {
+        var tileRackOffset = $('#pane-r').offset();
+        var dx = place[0].offset().left - ui.helper.parent().offset().left + 4;
+        var dy = place[0].offset().top  - ui.helper.parent().offset().top + 10;
+        slideBoardToHand(ui.helper, that, that.hand, dx, dy);
+      } else {
+        // this is the case where we try to stage a tile over an existing tile
+        // this not a valid spot, move the tile back to it's home
+        var x = ui.originalPosition.left;
+        var y = ui.originalPosition.top;
+
+        // restage the current piece
+        that.stageTile(ox, oy, letter);
+        slideBoardToBoard(ui.helper, that, x, y);
+      }
+    } else {
+      // there are no active regions, move the tile back to it's home
+      var dx = ui.originalPosition.left;
+      var dy = ui.originalPosition.top;
+      slideBoardToBoard(ui.helper, that, dx, dy);
+    }
+
+    // clear the current drop targets
+    that.hand.dropTargets = {};
+  };
+
   // jQuery UI event handler for when a square has a tile moved into it
   this.dropActivate = function(event, ui) {
     // figure out if we're currently in an occupied tile
@@ -120,7 +205,7 @@ window.Board = function($html) {
     var ty = Math.floor($drop.position().top  / 47);
     var idx = pos(tx, ty);
 
-    if (that.placedTiles[idx] !== null) {
+    if (that.placedTiles[idx] !== null || that.placedTiles[idx] !== null) {
       return;
     }
 
@@ -129,6 +214,7 @@ window.Board = function($html) {
     var dropName = this.id;
     that.dropTargets[dropName] = 1;
   };
+  
   // jQuery UI event handler for when a square has a tile moved out of it
   this.dropOut = function(event, ui) {
     var dropName = this.id;
@@ -137,19 +223,28 @@ window.Board = function($html) {
 };
 
 // place a tile on the board and get it ready for commiting
-window.Board.prototype.stageTile = function(x, y, letter, swapStaged) {
-  if (this.placedTiles[pos(x, y)] != null) {
+Board.prototype.stageTile = function(x, y, letter, swapStaged, validOnly) {
+  // give some defaults
+  if (swapStaged === undefined) {
+    swapStaged = false;
+  }
+  if (validOnly === undefined) {
+    swapStaged = false;
+  }
+
+  if (this.placedTiles[pos(x, y)] !== null) {
     // this spot is currently occupied by a permanently placed tile
     return false;
-  } else if (this.placedTiles[pos(x, y)] != null && !swapStaged) {
+  } else if (this.stagedTiles[pos(x, y)] !== null && !swapStaged) {
     // don't swap two staged tiles
     return false;
   } else {
     var positions = getPositions(this.stagedTiles).concat([[x, y]]);
     var isValid = getAxis(positions);
 
-    if (isValid[0] === false && isValid[1] === false) {
+    if (validOnly && isValid[0] === false && isValid[1] === false) {
       // the current spot is not within the row or column of currently placed tiles
+      // only runs if we explicity say that we don't want to allow invalid placement
       return false;
     } else {
       // this spot is either occupied by a staged tile or nothing
@@ -162,7 +257,7 @@ window.Board.prototype.stageTile = function(x, y, letter, swapStaged) {
 };
 
 // remove a pending tile from the board
-window.Board.prototype.unstageTile = function(x, y) {
+Board.prototype.unstageTile = function(x, y) {
   var idx = pos(x, y);
   var tmp = this.stagedTiles[idx];
   this.stagedTiles[idx] = null;
@@ -170,7 +265,7 @@ window.Board.prototype.unstageTile = function(x, y) {
 };
 
 // validate the currently staged tiles and make sure that it's OK
-window.Board.prototype.validateStaging = function(turn) {
+Board.prototype.validateStaging = function(turn) {
   // get the positions of all tiles
   var positions = getPositions(this.stagedTiles).sort(function(l, r) {
     if (pos(l[0], l[1]) < pos(r[0], r[1])) {
@@ -181,6 +276,10 @@ window.Board.prototype.validateStaging = function(turn) {
       return 0;
     }
   });
+
+  if (positions.length === 0) {
+    return [false, 'No tiles placed on the board'];
+  }
 
   // get the axis of the word
   var axis = getAxis(positions);
@@ -195,7 +294,7 @@ window.Board.prototype.validateStaging = function(turn) {
 
   // verify that the tiles lie along the same axis
   if (axis[0] === false && axis[1] === false) {
-    return false;
+    return [false, 'Tiles must be placed in a straight line without gaps'];
   }
 
   // determine the number of gaps in the combined staged and placed tile maps
@@ -221,20 +320,50 @@ window.Board.prototype.validateStaging = function(turn) {
 
   // verify that there are no gaps on the board between the start and end word
   if (gaps > 0) {
-    return false;
+    return [false, 'Tiles must be placed in a straight line without gaps'];
   }
 
   // verfiy that if it is the first turn, one piece lies along the star
-  if (turn === 0 && this.stagedTiles[pos(8, 8)] === null) {
-    return false;
+  if (turn === 0 && this.stagedTiles[pos(7, 7)] === null) {
+    return [false, 'The first word must be placed on the center square'];
   }
 
   // nothing's wrong
-  return true;
+  return [true, ''];
 };
 
+// 
+Board.prototype.currentScore = function() {
+  // create a temporary array of tiles that represents the current tiles, but
+  //   all committed
+  var tempTiles = _.clone(this.placedTiles);
+  this.stagedTiles.forEach(function(x, idx) {
+    if (x !== null) {
+      tempTiles[idx] = x;
+    }
+  }, this);
+
+  // get the positions of currently staged tiles
+  var positions = [];
+  this.stagedTiles.forEach(function(x, idx) {
+    if (this.stagedTiles[idx] !== null) {
+      // push the index to the list of indexes
+      positions.push(posInv(idx));
+    }
+  }, this);
+
+  // get all words to calculate the score for
+  var words = getWords(positions, tempTiles);
+  var that = this;
+
+  // calculate the score for each word
+  return words.reduce(function(prev, curr) {
+    return prev + scoreWord(curr, that.squareLayout);
+  }, 0);
+}
+
 // commit all staged tiles and return the score
-window.Board.prototype.commitTiles = function() {
+Board.prototype.commitTiles = function() {
   var positions = [];
   this.stagedTiles.forEach(function(x, idx) {
     if (this.stagedTiles[idx] !== null) {
@@ -246,25 +375,29 @@ window.Board.prototype.commitTiles = function() {
       positions.push(posInv(idx));
     }
   }, this);
+  
+  // show the changes made to the placed tiles
+  this.render();
 
   // get all words to calculate the score for
   var words = getWords(positions, this.placedTiles);
+  var that = this;
 
   // calculate the score for each word
   return words.reduce(function(prev, curr) {
-    return prev + scoreWord(curr);
+    return prev + scoreWord(curr, that.squareLayout);
   }, 0);
 };
 
 // display the board
-window.Board.prototype.render = function() {
+Board.prototype.render = function() {
   this.renderSquares();
   this.renderPlacedTiles();
   this.renderStagedTiles();
 };
 
 // render the squares that the tiles go on
-window.Board.prototype.renderSquares = function() {
+Board.prototype.renderSquares = function() {
   // remove all of the squares
   this.$html.children('#squares').remove();
 
@@ -293,7 +426,7 @@ window.Board.prototype.renderSquares = function() {
 };
 
 // render the permanently placed tiles on the board
-window.Board.prototype.renderPlacedTiles = function() {
+Board.prototype.renderPlacedTiles = function() {
   // remove all of the currently placed tiles
   this.$html.children('#placed-tiles').remove();
 
@@ -319,7 +452,7 @@ window.Board.prototype.renderPlacedTiles = function() {
 };
 
 // render the temporarily placed tiles on the board
-window.Board.prototype.renderStagedTiles = function() {
+Board.prototype.renderStagedTiles = function() {
   // remove all of the currently placed tiles
   this.$html.children('#staged-tiles').remove();
 
@@ -348,4 +481,12 @@ window.Board.prototype.renderStagedTiles = function() {
   }, this);
 
   this.$html.append($stagedTiles);
+
+  if (this.cb !== null) {
+    this.cb();
+  }
+};
+
+Board.prototype.onStage = function(cb) {
+  this.cb = cb;
 };

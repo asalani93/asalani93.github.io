@@ -52,6 +52,7 @@ var getPositions = function(board) {
   });
 }
 
+// determines which axis the tiles lie along
 var getAxis = function(positions) {
   return positions.reduce(function(prev, curr) {
     var x = someFunc(prev[0], curr[0]);
@@ -76,39 +77,61 @@ var getWords = function(positions, board) {
   var words = [];
 
   if (alignment[0] === false) {
-    // case for the x-axis
-
-    // determine the on-axis word
-    words.push(spanToEdge(board, idxSample, 0));
+    // case for x-axis
 
     // determine each off-axis word, discard results of length 1
+    var hasOffAxis = false;
     positions.forEach(function(x) {
       var idx = pos(x[0], x[1]);
       var word = spanToEdge(board, idx, 1); 
       if (word.length > 1) {
+        hasOffAxis = true;
         words.push(word);
       }
     });
+
+    // determine the on-axis word
+    var onAxis = spanToEdge(board, idxSample, 0);
+    if (onAxis.length > 1 || !hasOffAxis) {
+      // only use a word of length 1 if we don't have off-axis words
+      words.push(onAxis);
+    }
   } else if (alignment[1] === false) {
     // case for the y-axis
 
-    // determine the on-axis word
-    words.push(spanToEdge(board, idxSample, 1));
-
     // determine each off-axis word, discard results of length 1
+    var hasOffAxis = false;
     positions.forEach(function(x) {
       var idx = pos(x[0], x[1]);
       var word = spanToEdge(board, idx, 0);
       if (word.length > 1) {
+        hasOffAxis = true;
         words.push(word);
       }
     });
+
+    // determine the on-axis word
+    var onAxis = spanToEdge(board, idxSample, 1);
+    if (onAxis.length > 1 || !hasOffAxis) {
+      // only use a word of length 1 if we don't have off-axis words
+      words.push(onAxis);
+    }
   } else {
     // handle the case where the user placed just one letter
     var xWord = spanToEdge(board, idxSample, 0);
     var yWord = spanToEdge(board, idxSample, 1);
-    words.push(xWord);
-    if (yWord.length > 1) {
+    var minSize = Math.min(xWord.length, yWord.length);
+    var maxSize = Math.max(xWord.length, yWord.length);
+    if (maxSize === 1) {
+      words.push(xWord);
+    } else if (minSize === 1) {
+      if (xWord.length === 1) {
+        words.push(yWord);
+      } else {
+        words.push(xWord);
+      }
+    } else {
+      words.push(xWord);
       words.push(yWord);
     }
   }
@@ -121,8 +144,28 @@ var getWords = function(positions, board) {
 //   that the only time a box can be used is when a tile is placed on it.  however,
 //   if multiple words are formed on a multplier, that multplier is used for each
 //   word.  confused yet?
-var scoreWord = function(word) {
-  return 1;
+var scoreWord = function(word, board) {
+  var wordMult = 1;
+  var distribution = new Distribution();
+  var baseScore = word.reduce(function(prev, curr) {
+    var tileType = board[curr[1]];
+    var tileScore = distribution.dist[curr[0]].value;
+    if (tileType === 1) {
+      // letter x 2 spot
+      tileScore *= 2;
+    } else if (tileType === 2) {
+      // letter x 3 spot
+      tileScore *= 3;
+    } else if (tileType === 3) {
+      // word x 2 spot
+      wordMult *= 2;
+    } else if (tileType === 4) {
+      // word x 3 spot
+      wordMult *= 3;
+    }
+    return prev + tileScore;
+  }, 0);
+  return baseScore * wordMult;
 };
 
 // given a position, board, and axis: return a list of letter/index pairs that
@@ -182,27 +225,57 @@ var spanToEdge = function(board, idx, axis) {
   }
 };
 
+// the following functions simplify sliding the tiles from point A to point B
+// the last two are identical, but I made them seperate functions in case they
+//   needed to be different in the future
 var slideBoardToBoard = function($tile, board, x, y) {
-  $tile.draggable('disable');
+  $('.tile.ui-draggable').draggable('disable');
   $tile.animate({
     left: x + 'px',
     top: y + 'px'
   }, {
     complete: function() {
-      $tile.draggable('enable');
+      $('.tile.ui-draggable').draggable('enable');
       board.renderStagedTiles();
     }
   });
 };
 
 var slideHandToBoard = function($tile, board, hand, x, y) {
-  $tile.draggable('disable');
+  $('.tile.ui-draggable').draggable('disable');
   $tile.animate({
     left: x + 'px',
     top: y + 'px'
   }, {
     complete: function() {
-      $tile.draggable('enable');
+      $('.tile.ui-draggable').draggable('enable');
+      board.renderStagedTiles();
+      hand.render();
+    }
+  });
+};
+
+var slideHandToHand = function($tile, hand, x, y) {
+  $('.tile.ui-draggable').draggable('disable');
+  $tile.animate({
+    left: x + 'px',
+    top: y + 'px'
+  }, {
+    complete: function() {
+      $('.tile.ui-draggable').draggable('enable');
+      hand.render();
+    }
+  });
+};
+
+var slideBoardToHand = function($tile, board, hand, x, y) {
+  $('.tile.ui-draggable').draggable('disable');
+  $tile.animate({
+    left: x + 'px',
+    top: y + 'px'
+  }, {
+    complete: function() {
+      $('.tile.ui-draggable').draggable('enable');
       board.renderStagedTiles();
       hand.render();
     }

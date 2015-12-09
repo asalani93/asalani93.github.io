@@ -43,7 +43,7 @@ window.Distribution = function() {
   };
 }
 
-window.Distribution.prototype.shuffle = function() {
+Distribution.prototype.shuffle = function() {
   var that = this;
   var unshuffled = _.keys(this.dist).reduce(function(prev, curr) {
     var items = _.range(that.dist[curr].count).map(function() { return curr; });
@@ -58,46 +58,102 @@ window.Deck = function($html) {
   this.reset();
 };
 
-window.Deck.prototype.draw = function() {
-  var draw = this.deck[0];
-  this.deck = _.rest(this.deck);
-  return draw;
+Deck.prototype.draw = function() {
+  if (this.deck.length > 0) {
+    var draw = this.deck[0];
+    this.deck = _.rest(this.deck);
+    return draw;
+  } else {
+    return null;
+  }
 };
 
-window.Deck.prototype.reset = function() {
+Deck.prototype.reset = function() {
   this.deck = (function() {
     var dist = new Distribution();
     return dist.shuffle();
   })();
 };
 
-window.Deck.prototype.size = function() {
+Deck.prototype.size = function() {
   return this.deck.length;
 };
 
-window.Deck.prototype.render = function() {
+Deck.prototype.render = function() {
   // do something
 };
 
+var initializeEvents = function() {
+  var turn = 0;
+  var isValid = [false, ''];
+  var score = 0;
+
+  var $commitBtn = $('#commit-btn');
+  var $restartBtn = $('#restart-btn');
+  var $currentScore = $('#current-score');
+  var $totalScore = $('#total-score');
+
+  var checkIfValid = function() {
+    isValid = board.validateStaging(turn);
+
+    if (isValid[0]) {
+      $commitBtn.removeClass('btn-disabled');
+      $currentScore.removeClass('err');
+      $currentScore.children('p').text('Current Score: ' + board.currentScore());
+    } else {
+      $commitBtn.addClass('btn-disabled');
+      $currentScore.addClass('err');
+      $currentScore.children('p').text(isValid[1]);
+    }
+  };
+
+  // check if the initial board state is valid (it isn't)
+  checkIfValid();
+
+  // on a change in the board, check if its valid
+  board.onStage(checkIfValid);
+
+  $commitBtn.click(function() {
+    if (isValid[0]) {
+      // commit the tiles to the board
+      var newScore = board.commitTiles();
+      score += newScore;
+      $totalScore.children('p').text('Total Score: ' + score);
+      hand.draw(deck);
+
+      // increment the turn
+      turn += 1;
+
+      // redraw the game
+      hand.render();
+      board.render();
+    } else {      
+      // flash the errors so people know something's wrong
+      $currentScore.css({backgroundColor: '#FF0000'});
+      $currentScore.animate({
+        backgroundColor: '#000000'
+      }, {
+        duration: 1000,
+        queue: false
+      });
+    }
+  });
+
+  $restartBtn.click(function() {
+    turn = 0;
+
+  });
+}
+
 $(document).ready(function() {
-  window.board = new Board($('#board'));
+  window.board = new Board($('#board'), null);
   window.deck = new Deck();
   window.hand = new Hand($('#pane-r'), board);
+  board.hand = hand;
 
   hand.draw(deck);
   hand.render();
-
-  board.stageTile(5, 5, 'a');
-  board.stageTile(5, 6, 'a');
-  board.stageTile(5, 7, 'a');
-  board.stageTile(6, 6, 'a');
-  board.stageTile(5, 7, 'a');
-  board.stageTile(5, 4, 'c');
-  board.unstageTile(5, 4);
-  board.commitTiles();
-
-  board.stageTile(4, 4, 'b');
-  board.stageTile(4, 5, 'b');
-
   board.render();
+
+  initializeEvents();
 });

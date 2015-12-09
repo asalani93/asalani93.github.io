@@ -17,6 +17,13 @@ body {
 
 * {
   box-sizing: border-box;
+
+  /* makes text unselectable */
+  /* this is a game and it would make sense to highlight text */
+  -webkit-user-select: none; /* Chrome/Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  user-select: none;
 }
 
 /* Where the scrabble pieces are laid out. Should be centered in the mat. */
@@ -98,6 +105,7 @@ body {
 #board > #staged-tiles > .tile {
   background-color: #DDD;
   border: 1px solid #000;
+  cursor: pointer;
   height: 43px;
   position: absolute !important;
   width: 43px;
@@ -125,8 +133,41 @@ body {
 #pane-l {
   background-color: #F00;
   height: 705px;
+  padding: 5px;
   position: absolute;
   width: 230px;
+}
+
+#pane-l > .center-btn, #pane-l > .center-hollow {
+  display: table;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+#pane-l > .center-btn {
+  background-color: #FFF;
+  cursor: pointer;
+}
+
+#pane-l > .center-hollow {
+  background-color: #000;
+  color: #FFF;
+}
+
+#pane-l > .center-btn.btn-disabled {
+  background-color: #000;
+  color: #FFF;
+}
+
+#pane-l > .center-hollow.err {
+  color: #F00;
+}
+
+#pane-l > .center-btn > p, #pane-l > .center-hollow > p {
+  display: table-cell;
+  height: 60px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 /* Location for your current list of letters. */
@@ -135,14 +176,23 @@ body {
   height: 705px;
   left: 970px;
   position: absolute;
-  width: 230px;
+  width: 51px;
 }
 
-#pane-r > .tile {
+#pane-r > .tile-drop {
+  background-color: #22F;
+  height: 63px;
+  position: relative;
+}
+
+#pane-r > .tile-drop > .tile {
   background-color: #DDD;
   border: 1px solid #000;
+  cursor: pointer;
   height: 43px;
+  left: 4px;
   position: absolute !important;
+  top: 10px;
   width: 43px;
   z-index: 13;
 }
@@ -153,6 +203,17 @@ body {
 }
 
 /* CSS for styling each tile correctly */
+
+/* letters */
+.tile::before {
+  display: block;
+  font-size: 30px;
+  position: absolute;
+  text-align: center;
+  top: 2px;
+  width: 37px;
+}
+
 .tile.tile-a::before { content: 'A'; }
 .tile.tile-b::before { content: 'B'; }
 .tile.tile-c::before { content: 'C'; }
@@ -179,4 +240,40 @@ body {
 .tile.tile-x::before { content: 'X'; }
 .tile.tile-y::before { content: 'Y'; }
 .tile.tile-z::before { content: 'Z'; }
-.tile.tile-_::before { content: '_'; }
+.tile.tile-_::before { content: ''; }
+
+/* values */
+.tile::after {
+  bottom: 3px;
+  font-size: 10px;
+  position: absolute;
+  right: 3px;
+}
+
+.tile.tile-a::after { content:  "1";}
+.tile.tile-b::after { content:  "3";}
+.tile.tile-c::after { content:  "3";}
+.tile.tile-d::after { content:  "2";}
+.tile.tile-e::after { content:  "1";}
+.tile.tile-f::after { content:  "4";}
+.tile.tile-g::after { content:  "2";}
+.tile.tile-h::after { content:  "4";}
+.tile.tile-i::after { content:  "1";}
+.tile.tile-j::after { content:  "8";}
+.tile.tile-k::after { content:  "5";}
+.tile.tile-l::after { content:  "1";}
+.tile.tile-m::after { content:  "3";}
+.tile.tile-n::after { content:  "1";}
+.tile.tile-o::after { content:  "1";}
+.tile.tile-p::after { content:  "3";}
+.tile.tile-q::after { content: "10";}
+.tile.tile-r::after { content:  "1";}
+.tile.tile-s::after { content:  "1";}
+.tile.tile-t::after { content:  "1";}
+.tile.tile-u::after { content:  "1";}
+.tile.tile-v::after { content:  "4";}
+.tile.tile-w::after { content:  "4";}
+.tile.tile-x::after { content:  "8";}
+.tile.tile-y::after { content:  "4";}
+.tile.tile-z::after { content: "10";}
+.tile.tile-_::after { content:   "";}
