@@ -156,7 +156,7 @@ var scoreWord = function(word, board) {
     } else if (tileType === 2) {
       // letter x 3 spot
       tileScore *= 3;
-    } else if (tileType === 3) {
+    } else if (tileType === 3 || tileType === 5) {
       // word x 2 spot
       wordMult *= 2;
     } else if (tileType === 4) {

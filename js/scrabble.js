@@ -43,6 +43,7 @@ window.Distribution = function() {
   };
 }
 
+// returns a shuffled distribution of letters
 Distribution.prototype.shuffle = function() {
   var that = this;
   var unshuffled = _.keys(this.dist).reduce(function(prev, curr) {
@@ -53,11 +54,13 @@ Distribution.prototype.shuffle = function() {
   return _.shuffle(unshuffled);
 };
 
+// the deck object that holds all of the tiles
 window.Deck = function($html) {
   this.$html = $html;
   this.reset();
 };
 
+// pull a tile from the deck, return null if nothing is left
 Deck.prototype.draw = function() {
   if (this.deck.length > 0) {
     var draw = this.deck[0];
@@ -68,6 +71,7 @@ Deck.prototype.draw = function() {
   }
 };
 
+// populate the deck with a valid distribution of letters
 Deck.prototype.reset = function() {
   this.deck = (function() {
     var dist = new Distribution();
@@ -75,12 +79,50 @@ Deck.prototype.reset = function() {
   })();
 };
 
+// get back the number of tiles still in the deck
 Deck.prototype.size = function() {
   return this.deck.length;
 };
 
+// redraw the box displaying the number of tiles remaining
 Deck.prototype.render = function() {
-  // do something
+  this.$html.empty();
+
+  // create an object full of zeros for each letter
+  var bins = {
+    a: 0, b: 0, c: 0, d: 0, e: 0, f: 0,
+    g: 0, h: 0, i: 0, j: 0, k: 0, l: 0,
+    m: 0, n: 0, o: 0, p: 0, q: 0, r: 0,
+    s: 0, t: 0, u: 0, v: 0, w: 0, x: 0,
+    y: 0, z: 0, _: 0
+  };
+  this.deck.forEach(function(x) {
+    bins[x] += 1;
+  }, this);
+
+  var letters = Object.keys(bins).sort(function(l, r) {
+    var lCode = l.charCodeAt(0);
+    var rCode = r.charCodeAt(0);
+
+    // blank tiles should be last
+    if (l === '_') {
+      lCode += 1000;
+    }
+    if (r === '_') {
+      rCode += 1000;
+    }
+
+    return lCode - rCode;
+  });
+
+  this.$html.append($('<div class="head">Tiles Left:</div>'));
+  letters.forEach(function(x) {
+    var $div = $('<div class="count">' +
+      '<div class="letter">' + x + ':&nbsp;</div>' +
+      '<div class="letter-amt">' + bins[x] + '</div>' +
+    '</div>');
+    this.$html.append($div);
+  }, this);
 };
 
 var initializeEvents = function() {
@@ -127,11 +169,12 @@ var initializeEvents = function() {
       // redraw the game
       hand.render();
       board.render();
+      deck.render();
     } else {      
       // flash the errors so people know something's wrong
       $currentScore.css({backgroundColor: '#FF0000'});
       $currentScore.animate({
-        backgroundColor: '#000000'
+        backgroundColor: 'rgba(255, 0, 0, 0)'
       }, {
         duration: 1000,
         queue: false
@@ -141,19 +184,33 @@ var initializeEvents = function() {
 
   $restartBtn.click(function() {
     turn = 0;
+    score = 0;
+    checkIfValid();
+    $totalScore.children('p').text('Total Score: ' + score);
 
+    window.board = new Board($('#board'), null);
+    window.deck = new Deck($('#tile-count'));
+    window.hand = new Hand($('#pane-r'), board);
+    board.hand = hand;
+    board.onStage(checkIfValid);
+
+    hand.draw(deck);
+    hand.render();
+    board.render();
+    deck.render();
   });
 }
 
 $(document).ready(function() {
   window.board = new Board($('#board'), null);
-  window.deck = new Deck();
+  window.deck = new Deck($('#tile-count'));
   window.hand = new Hand($('#pane-r'), board);
   board.hand = hand;
 
   hand.draw(deck);
   hand.render();
   board.render();
+  deck.render();
 
   initializeEvents();
 });
